@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fale Fácil | Syntax Studios</title>
+    <style>
+        :root {
+            --primary: #004aad;
+            --secondary: #00d4ff;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --gray: #6c757d;
+            --success: #28a745;
+            --pending: #ffc107;
+            --danger: #dc3545;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background: var(--light); color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+
+        nav {
+            background: var(--dark);
+            color: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; }
+        .logo span { color: var(--secondary); }
+        
+        .nav-links { display: flex; gap: 20px; }
+        .nav-btn {
+            background: none; border: none; color: #aaa; 
+            font-size: 1rem; cursor: pointer; transition: 0.3s;
+        }
+        .nav-btn:hover, .nav-btn.active { color: var(--white); font-weight: bold; }
+        .nav-btn.active { border-bottom: 2px solid var(--secondary); }
+
+        main { flex: 1; padding: 2rem 5%; max-width: 1200px; margin: 0 auto; width: 100%; }
+        
+        .page { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .page.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hero {
+            background: var(--white);
+            color: var(--dark);
+            padding: 2.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid #eee;
+        }
+        .hero h1 { font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--primary); }
+        .hero p { color: var(--gray); margin-bottom: 1.5rem; }
+        .hero button {
+            background: var(--primary); border: none; padding: 12px 35px;
+            border-radius: 6px; font-weight: 600; color: white;
+            cursor: pointer; font-size: 1rem; transition: background 0.2s;
+        }
+        .hero button:hover { background: #003380; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .stat-card {
+            background: var(--white); padding: 1.5rem; border-radius: 8px;
+            box-shadow: var(--shadow); text-align: center; border: 1px solid #eee;
+        }
+        .stat-number { font-size: 2rem; font-weight: 700; color: var(--primary); display: block; margin-bottom: 5px; }
+        .stat-label { color: var(--gray); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .home-list-title { font-size: 1.2rem; color: var(--dark); margin-bottom: 1rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
+        .clean-list { display: flex; flex-direction: column; gap: 12px; }
+        .clean-item {
+            background: white; 
+            padding: 1rem; 
+            border-radius: 8px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .clean-item:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.08); }
+        
+        .clean-info h4 { margin-bottom: 4px; color: #333; font-size: 1rem; font-weight: 700; }
+        .clean-info span { font-size: 0.8rem; color: var(--gray); margin-right: 10px; }
+        
+        .btn-arrow { 
+            background: transparent; color: var(--primary); border: 1px solid var(--primary); 
+            padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; 
+        }
+        .btn-arrow:hover { background: var(--primary); color: white; }
+
+        .form-container { background: var(--white); padding: 2.5rem; border-radius: 12px; box-shadow: var(--shadow); max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #444; }
+        input, select, textarea {
+            width: 100%; padding: 12px; border: 1px solid #ddd;
+            border-radius: 6px; font-size: 1rem; background: #fafafa;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: white; }
+        input:disabled { background: #eee; cursor: not-allowed; }
+
+        .btn-submit {
+            width: 100%; padding: 14px; background: var(--primary);
+            color: white; border: none; border-radius: 6px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
+        }
+
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .report-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        
+        .report-card {
+            background: var(--white); padding: 1.5rem; border-radius: 8px;
+            box-shadow: var(--shadow); display: flex;
+            justify-content: space-between; align-items: center;
+            border-left: 4px solid var(--pending);
+        }
+        .report-card.resolved { border-left-color: var(--success); background: #fdfdfd; }
+        .report-card.resolved h3 { text-decoration: line-through; color: #999; }
+        
+        .report-info h3 { margin-bottom: 0.5rem; font-size: 1.1rem; font-weight: 700; }
+        .report-desc { font-size: 0.95rem; color: #555; margin-bottom: 0.8rem; line-height: 1.4; }
+        .meta { font-size: 0.85rem; color: #666; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; background: #eee; font-weight: 600; }
+        
+        .actions button { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-resolve { background: #e6f9ed; color: var(--success); border: 1px solid var(--success); }
+        .btn-resolve:hover { background: var(--success); color: white; }
+        .btn-delete { background: white; color: var(--danger); margin-left: 5px; border: 1px solid #ddd; }
+        .btn-delete:hover { border-color: var(--danger); background: #fff5f5; }
+
+        @media (max-width: 768px) {
+            .nav-links span { display: none; }
+            .report-card, .clean-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .actions, .btn-arrow { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Syntax<span>Studios</span></div>
+        <div class="nav-links">
+            <button class="nav-btn active" onclick="showPage('home')">Início</button>
+            <button class="nav-btn" onclick="showPage('form')">Relatar</button>
+            <button class="nav-btn" onclick="showPage('dashboard')">Gestão</button>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home" class="page active">
+            <div class="hero">
+                <h1>Fale Fácil Digital</h1>
+                <p>Sistema centralizado de gestão de ocorrências.</p>
+                <button onclick="showPage('form')">+ Novo Relatório</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalReports">0</span>
+                    <span class="stat-label">Total Registrado</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="pendingReports" style="color: var(--pending)">0</span>
+                    <span class="stat-label">Pendentes</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="resolvedReports" style="color: var(--success)">0</span>
+                    <span class="stat-label">Concluídos</span>
+                </div>
+            </div>
+
+            <h3 class="home-list-title">Chamados Pendentes</h3>
+            <div id="homeUrgentList" class="clean-list">
+            </div>
+        </section>
+
+        <section id="form" class="page">
+            <div class="form-container">
+                <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Nova Ocorrência</h2>
+                <form id="reportForm">
+                    
+                    <div class="form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label style="margin:0">Seu Nome</label>
+                            <label style="font-size: 0.9rem; color: #666; font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" id="anonInput"> Anônimo
+                            </label>
+                        </div>
+                        <input type="text" id="nameInput" placeholder="Digite seu nome completo">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Resumo do Problema (Assunto)</label>
+                        <input type="text" id="subjectInput" placeholder="Ex: Torneira vazando no banheiro" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="catInput" required>
+                            <option value="Infraestrutura">🏗️ Infraestrutura</option>
+                            <option value="TI">💻 TI / Computadores</option>
+                            <option value="RH">👥 Recursos Humanos</option>
+                            <option value="Segurança">🛡️ Segurança</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Localização</label>
+                        <select id="locInput" required>
+                            <option value="Produção">Bloco A - Produção</option>
+                            <option value="Administrativo">Bloco B - Administrativo</option>
+                            <option value="Refeitório">Refeitório</option>
+                            <option value="Estacionamento">Estacionamento</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição Detalhada</label>
+                        <textarea id="descInput" rows="4" placeholder="Descreva os detalhes..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Registrar no Sistema</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="dashboard" class="page">
+            <div class="dashboard-header">
+                <h2>Controle de Chamados</h2>
+                <button onclick="clearAll()" style="color: #888; background: none; border: none; cursor: pointer; text-decoration: underline;">Limpar Histórico</button>
+            </div>
+            <div id="reportsList" class="report-grid">
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let reports = JSON.parse(localStorage.getItem('syntaxReports')) || [];
+
+        document.getElementById('anonInput').addEventListener('change', function(e) {
+            const nameInput = document.getElementById('nameInput');
+            if(e.target.checked) {
+                nameInput.value = '';
+                nameInput.disabled = true;
+                nameInput.placeholder = "Identidade oculta";
+            } else {
+                nameInput.disabled = false;
+                nameInput.placeholder = "Digite seu nome completo";
+            }
+        });
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            const ids = ['home', 'form', 'dashboard'];
+            const btnIndex = ids.indexOf(pageId);
+            if(btnIndex >= 0) document.querySelectorAll('.nav-btn')[btnIndex].classList.add('active');
+
+            if(pageId === 'home' || pageId === 'dashboard') renderData();
+        }
+
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const isAnon = document.getElementById('anonInput').checked;
+            const reporterName = isAnon ? "Anônimo" : (document.getElementById('nameInput').value.trim() || "Não identificado");
+
+            const newReport = {
+                id: Date.now(),
+                reporter: reporterName,
+                subject: document.getElementById('subjectInput').value,
+                category: document.getElementById('catInput').value,
+                location: document.getElementById('locInput').value,
+                desc: document.getElementById('descInput').value,
+                status: 'Pendente',
+                date: new Date().toLocaleDateString('pt-BR')
+            };
+
+            reports.unshift(newReport);
+            saveData();
+            this.reset();
+            
+            document.getElementById('nameInput').disabled = false;
+            document.getElementById('nameInput').placeholder = "Digite seu nome completo";
+            
+            showPage('home'); 
+        });
+
+        function renderData() {
+            document.getElementById('totalReports').innerText = reports.length;
+            const pendentes = reports.filter(r => r.status === 'Pendente');
+            document.getElementById('pendingReports').innerText = pendentes.length;
+            document.getElementById('resolvedReports').innerText = reports.filter(r => r.status === 'Resolvido').length;
+
+            const homeList = document.getElementById('homeUrgentList');
+            homeList.innerHTML = '';
+            
+            if (pendentes.length === 0) {
+                homeList.innerHTML = '<p style="color: #999; font-style: italic;">Não há chamados pendentes no momento.</p>';
+            } else {
+                pendentes.slice(0, 5).forEach(report => {
+                    const item = document.createElement('div');
+                    item.className = 'clean-item';
+                    item.innerHTML = `
+                        <div class="clean-info">
+                            <h4>${report.subject}</h4>
+                            <span>${report.category}</span>
+                            <span>• ${report.location}</span>
+                            <span style="color: #004aad;">👤 ${report.reporter}</span>
+                        </div>
+                        <button class="btn-arrow" onclick="showPage('dashboard')">Ver detalhes</button>
+                    `;
+                    homeList.appendChild(item);
+                });
+                
+                if(pendentes.length > 5) {
+                    const more = document.createElement('div');
+                    more.innerHTML = `<center><small style="color:#888; margin-top:10px; display:block;">+ ${pendentes.length - 5} outros itens</small></center>`;
+                    homeList.appendChild(more);
+                }
+            }
+
+            const dashboardList = document.getElementById('reportsList');
+            dashboardList.innerHTML = '';
+
+            if (reports.length === 0) {
+                dashboardList.innerHTML = '<p style="text-align: center; color: #999; margin-top: 20px;">Nenhum registro encontrado.</p>';
+            } else {
+                reports.forEach(report => {
+                    const isResolved = report.status === 'Resolvido';
+                    const item = document.createElement('div');
+                    item.className = `report-card ${isResolved ? 'resolved' : ''}`;
+                    
+                    item.innerHTML = `
+                        <div class="report-info">
+                            <h3>${report.subject}</h3>
+                            <div class="report-desc">${report.desc}</div>
+                            <div class="meta">
+                                <span class="badge">👤 ${report.reporter}</span>
+                                <span class="badge">${report.category}</span>
+                                <span class="badge">📍 ${report.location}</span>
+                                <span>📅 ${report.date}</span>
+                                <strong style="color: ${isResolved ? 'green' : '#f39c12'}">${report.status}</strong>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            ${!isResolved ? `<button class="btn-resolve" onclick="resolveTicket(${report.id})">✔ Concluir</button>` : ''}
+                            <button class="btn-delete" onclick="deleteTicket(${report.id})">Excluir</button>
+                        </div>
+                    `;
+                    dashboardList.appendChild(item);
+                });
+            }
+        }
+
+        function resolveTicket(id) {
+            const ticket = reports.find(r => r.id === id);
+            if(ticket) {
+                ticket.status = 'Resolvido';
+                saveData();
+                renderData();
+            }
+        }
+
+        function deleteTicket(id) {
+            reports = reports.filter(r => r.id !== id);
+            saveData();
+            renderData();
+        }
+
+        function clearAll() {
+            reports = [];
+            saveData();
+            renderData();
+        }
+
+        function saveData() {
+            localStorage.setItem('syntaxReports', JSON.stringify(reports));
+        }
+
+        renderData();
+    </script>
+</body>
+</html>
